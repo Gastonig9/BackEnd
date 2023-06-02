@@ -5,14 +5,14 @@ const router = Router();
 const pManager = new ProductManager("../productos.json");
 
 router.get("/", (req, res) => {
-  const limit = parseInt(req.query.limit);
-  let products = pManager.getProducts();
+    const limit = parseInt(req.query.limit);
+    let products = pManager.getProducts();
+    if (!isNaN(limit)) {
+      products = products.slice(0, limit);
+      return res.send(JSON.stringify(products));
+    }
+    res.send(JSON.stringify(products));
 
-  if (!isNaN(limit)) {
-    products = products.slice(0, limit);
-  }
-
-  res.send(JSON.stringify(products));
 });
 
 router.get("/:id", (req, res) => {
@@ -20,19 +20,43 @@ router.get("/:id", (req, res) => {
   let products = pManager.getProductById(idParams);
 
   if (products) {
-    res.send(JSON.stringify(products));
+    return res.send(JSON.stringify(products));
   } else {
-    res.status(404).send("Product nt found");
+    return res.status(404).send("Product not found");
   }
 });
 
 router.post("/", (req, res) => {
-  const {title, description, price, status, stock, category, thumbnails, code} = req.body;
+  const {
+    title,
+    description,
+    price,
+    status,
+    stock,
+    category,
+    thumbnails,
+    code,
+  } = req.body;
 
-  pManager.addProduct(title,description,price,status,stock,category,thumbnails,code);
-  pManager.archivarProds();
+  if(!title, !description, !price, !status, !stock, !category, !thumbnails, !code){
+    return res.status(400).send("You have not completed all the fields")
+  }else{
+    pManager.addProduct(
+      title,
+      description,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails,
+      code
+    );
+    pManager.archivarProds();
+  
+    return res.status(200).send("Add product successfully");
+  }
 
-  res.send("Add product successfully");
+
 });
 
 router.put("/:idUpdate", (req, res) => {
@@ -42,23 +66,22 @@ router.put("/:idUpdate", (req, res) => {
 
   if (updatedProduct) {
     pManager.archivarProds();
-    res.send(updatedProduct);
+    return res.send(updatedProduct);
   } else {
-    res.send("Product nt found");
+    return res.send("Product not found");
   }
 });
 
 router.delete("/:idDelete", (req, res) => {
-    const id = parseInt(req.params.idDelete);
-    const productDelete = pManager.deleteProduct(id);
+  const id = parseInt(req.params.idDelete);
+  const productDelete = pManager.deleteProduct(id);
 
-    if (!productDelete) {
-        res.send("Product not found");
-    }
+  if (!productDelete) {
+    return res.send("Product not found");
+  }
 
-    pManager.archivarProds();
-    res.send("Product deleted successfully");
+  pManager.archivarProds();
+  return res.send("Product deleted successfully");
 });
-
 
 export default router;

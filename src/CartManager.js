@@ -4,6 +4,7 @@ export class CartManager {
     this.path = path;
     this.cart = [];
     this.id = 1;
+    this.loadCart()
   }
 
   addCart() {
@@ -14,6 +15,7 @@ export class CartManager {
     };
     this.cart.push(newProductCar);
     this.saveCartInJson();
+    return true;
   }
 
   getProductsCart() {
@@ -82,7 +84,16 @@ export class CartManager {
             cartToUpdate.products = updatedCart;
             return this.saveCartInJson();
         }
-        return Promise.reject("Cart not found");
+        throw new Error("Cart not found");
+  }
+
+  loadCart() {
+    if (fs.existsSync(this.path)) {
+      const jsonData = fs.readFileSync(this.path, "utf-8");
+      this.cart = JSON.parse(jsonData);
+    } else {
+      this.saveCartInJson();
+    }
   }
 }
 
