@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ProductManager } from "../src/ProductManager.js";
+import { socketServer } from "../src/app.js";
 
 const router = Router();
 const pManager = new ProductManager("../productos.json");
@@ -51,6 +52,8 @@ router.post("/", (req, res) => {
       thumbnails,
       code
     );
+    const productAdded = pManager.getProducts()
+    socketServer.emit('addProducts', productAdded)
     pManager.archivarProds();
   
     return res.status(200).send("Add product successfully");
@@ -64,6 +67,8 @@ router.put("/:idUpdate", (req, res) => {
   const dataUpdate = req.body;
   const updatedProduct = pManager.updateProduct(id, dataUpdate);
 
+  const productAdded = pManager.getProducts()
+  socketServer.emit('addProducts', productAdded)
   if (updatedProduct) {
     pManager.archivarProds();
     return res.send(updatedProduct);
@@ -76,6 +81,8 @@ router.delete("/:idDelete", (req, res) => {
   const id = parseInt(req.params.idDelete);
   const productDelete = pManager.deleteProduct(id);
 
+  const productAdded = pManager.getProducts()
+  socketServer.emit('addProducts', productAdded)
   if (!productDelete) {
     return res.send("Product not found");
   }
@@ -83,5 +90,7 @@ router.delete("/:idDelete", (req, res) => {
   pManager.archivarProds();
   return res.send("Product deleted successfully");
 });
+
+
 
 export default router;

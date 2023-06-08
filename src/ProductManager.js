@@ -8,35 +8,14 @@ export class ProductManager {
     this.loadProducts()
   }
 
-  addProduct(
-    title,
-    description,
-    price,
-    status,
-    stock,
-    category,
-    thumbnails,
-    code
-  ) {
-    if (
-      title &&
-      description &&
-      price &&
-      status &&
-      stock &&
-      category &&
-      thumbnails &&
-      code
-    ) {
-      const verificationCode = this.products.some(
-        (product) => product.code === code
-      );
+  addProduct(title,description,price,status,stock,category,thumbnails,code) {
+    if (title && description && price && status && stock && category && thumbnails && code) {
+      const verificationCode = this.products.some((product) => product.code === code);
       if (verificationCode) {
         throw new Error("repeated code");
       } else {
-        let id = this.id++;
         const newProduct = {
-          id,
+          id: this.id++,
           title: String(title),
           description: String(description),
           price: Number(price),
