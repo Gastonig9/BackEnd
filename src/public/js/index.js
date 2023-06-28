@@ -11,7 +11,7 @@ socket.on('addProducts', (products) => {
       pElement.textContent = title;
       $productsList.appendChild(pElement);
     });
-  });
+});
   
 
 // let productsContain = document.getElementById("products")
