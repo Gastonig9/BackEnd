@@ -70,7 +70,7 @@ router.put("/:idUpdate", async (req, res) => {
 
 router.delete("/:idDelete", async (req, res) => {
   try {
-    const idDelete = req.params.idDelete;  // Usar el mismo nombre de variable "idDelete"
+    const idDelete = req.params.idDelete;
     const productToDelete = await pManagerMDB.deleteProductMDB(idDelete);
 
     if (productToDelete) {

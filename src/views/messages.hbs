@@ -1,14 +1,28 @@
-<h1>Messages real time</h1>
+<!-- messages.hbs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Messages</title>
+</head>
+<body>
+  <h1>Messages with postman</h1>
 
-<div>
-  <h1>Form</h1>
-  <input type="text" id="user" placeholder="Insert user"/>
-  <input type="text" id="message" placeholder="Insert message"/>
+  {{#each messages}}
+  <ul style="background-color: brown; 
+  padding: 10px; color: white;">
+    <li>{{this.user}}</li>
+    <li>{{this.message}}</li>
+    <hr>
+  </ul>
+{{/each}}
 
-  <div id="box-messages">
-    <h1>Messages:</h1>
-  </div>
-</div>
+  <ul style="background-color: brown; 
+  padding: 10px; margin-bottom: 10px; color: white;" id="newMessage">
 
-<script src="/socket.io/socket.io.js"></script>
+  </ul>
+  <script src="/socket.io/socket.io.js"></script>
 <script src="/js/messages.js"></script>
+</body>
+</html>
+
+

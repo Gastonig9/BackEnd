@@ -1,9 +1,11 @@
 const socket = io();
+const $newMessage = document.getElementById("newMessage");
 
-console.log(socket);
+socket.on('getMessage', msg => {
+  const messageElement = document.createElement('li');
+  const messageElement2 = document.createElement('hr');
+  messageElement.textContent = msg;
 
-socket.on("getMessage", (msg) => {
-  console.log("entro");
-  let data = msg;
-  console.log(data);
+  $newMessage.appendChild(messageElement);
+  $newMessage.appendChild(messageElement2);
 });
