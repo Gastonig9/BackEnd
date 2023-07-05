@@ -6,14 +6,21 @@ export default class ProductManagerMdb {
     this.productModel = productModel;
   }
 
-  async getProductsMDB() {
+  async getProductsMDB(limit, page, sort, query) {
     try {
-      const allProducts = await this.productModel.find();
+      const allProducts = await this.productModel.paginate(
+        {query},
+        {
+          limit: limit || 4,
+          page: page || 1,
+          sort: sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : undefined
+        }
+      )
       return allProducts;
     } catch (error) {
       throw new Error("Could not get the products");
     }
-  }
+  }  
 
   async getProductsByIdMDB(pid) {
     try {

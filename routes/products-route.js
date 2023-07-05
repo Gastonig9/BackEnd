@@ -8,19 +8,14 @@ const pManagerMDB = new ProductManagerMdb();
 
 router.get("/", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit);
     let products = await pManagerMDB.getProductsMDB();
-
-    if (!isNaN(limit)) {
-      products = products.slice(0, limit);
-      return res.send(JSON.stringify(products));
-    }
 
     res.send(JSON.stringify(products));
   } catch (error) {
-    res.status(500).send("Internal server error");
+    res.status(500).send("Internal server error" + error);
   }
 });
+
 
 router.get("/:id", async (req, res) => {
   try {

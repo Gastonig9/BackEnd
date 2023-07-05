@@ -1,0 +1,28 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="card text-bg-success mt-3 mb-3 mx-auto" style="max-width: 28rem;">
+      <div class="card-header">Detalle del producto</div>
+      <div class="card-body">
+        <h5 class="card-title">{{produDetail.title}}</h5>
+        <ul>
+          <li>Descripción: {{produDetail.description}}</li>
+          <li>Precio: {{produDetail.price}}</li>
+          <li>Stock: {{produDetail.stock}}</li>
+          <li>Categoría: {{produDetail.category}}</li>
+          <button class="btn btn-warning mt-5">Agregar al carrito</button>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

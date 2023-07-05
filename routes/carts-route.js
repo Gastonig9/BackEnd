@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
       res.status(404).send("Fail to get the carts");
     }
   } catch (error) {
-    res.status(500).send("Internal server error");
+    res.status(500).send("Internal server error" + error);
   }
 });
 
@@ -67,6 +67,76 @@ router.post("/:cid/product/:pid", async (req, res) => {
     res.status(500).send("Internal server error" + error);
   }
 });
+
+router.put("/:cid", async (req, res) => {
+  try {
+    const cartID = req.params.cid;
+    const updatedProducts = req.body.products;
+
+    const updateCart = await cManagerMdb.updateCart(cartID, updatedProducts);
+
+    if (updateCart) {
+      res.status(200).send("Cart updated successfully");
+    } else {
+      res.status(404).send("Cart not found or could not be updated");
+    }
+  } catch (error) {
+    res.status(500).send("Internal server error: " + error);
+  }
+});
+
+router.put("/:cid/product/:pid", async (req, res) => {
+  try {
+    const cID = req.params.cid;
+    const pID = req.params.pid;
+    const { quantity } = req.body;
+    
+    const updateQuantity = await cManagerMdb.updateQuantity(cID, pID, quantity);
+
+    if (updateQuantity) {
+      res.status(200).send("Product updated successfully");
+    } else {
+      res.status(404).send("Product not found or could not be updated");
+    }
+  } catch (error) {
+    res.status(500).send("Internal server error: " + error);
+  }
+});
+
+router.delete("/:cid", async (req, res) => {
+  try {
+    let cID = req.params.cid;
+    let emptyCart = await cManagerMdb.emptyCart(cID)
+
+    if(emptyCart) {
+      res.status(200).send("Cart empty!")
+    }else{
+      res.status(404).send("None cart")
+    }
+  } catch (error) {
+    res.status(500).send("Internal server error" + error);
+  }
+
+
+
+})
+
+router.delete("/:cid/product/:pid", async (req, res) => {
+  try {
+    const cID = req.params.cid;
+    const pID = req.params.pid;
+  
+    const deleteProductInCart = await cManagerMdb.deleteProductInCartMDB(cID, pID)
+    if(deleteProductInCart) {
+      res.status(200).send("Product deleted")
+    }else{
+      res.status(404).send("None product")
+    }
+  } catch (error) {
+    res.status(500).send("Interval server error")
+  }
+
+})
 
 
 export default router;

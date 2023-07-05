@@ -16,10 +16,10 @@ export default class CartManagerMdb {
 
   async getProductsCartMDB() {
     try {
-      const carts = await this.cartModel.find();
+      const carts = await this.cartModel.find().populate("products.product");
       return carts;
     } catch (error) {
-        throw new Error("Could not get carts");
+        throw new Error("Could not get carts" + error);
     }
   }
 
@@ -57,6 +57,82 @@ export default class CartManagerMdb {
       throw new Error("Could not add products to cart: " + error);
     }
   }
+
+  async emptyCart(cartID) {
+    try {
+      const cart = await this.cartModel.findById({_id: cartID})
+
+      if(cart) {
+        cart.products = []
+        await cart.save()
+        return "Cart empty"
+      }else {
+        throw new Error("Cart not found")
+      }
+    } catch (error) {
+      throw new Error("Could not empty cart")
+    }
+  }
+
+  async deleteProductInCartMDB(cartID, prodID) { 
+    try {
+      const cart = await this.cartModel.findById(cartID)
+  
+      if (!cart) {
+        throw new Error("Cart not found")
+      }
+    
+      const findProductIndex = cart.products.findIndex(prod => prod.id === prodID)
+      if (findProductIndex === -1) {
+        throw new Error("Product not found")
+      }
+    
+      cart.products.splice(findProductIndex, 1)
+      await cart.save()
+    
+      return true
+    } catch (error) {
+      throw new Error("Could not delete")
+    }
+
+  }
+
+  async updateQuantity(cartID, prodID, quantityChange) {
+    const cart = await this.cartModel.findById(cartID);
+  
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+  
+    const product = cart.products.find((prod) => prod.id === prodID);
+  
+    if (product) {
+      product.quantity = quantityChange;
+      await cart.save();
+    } else {
+      throw new Error("Product not found");
+    }
+  }
+
+  async updateCart(cartID, updatedProducts) {
+    try {
+      const cart = await this.cartModel.findById(cartID);
+  
+      if (!cart) {
+        throw new Error("Cart not found");
+      }
+  
+      cart.products = updatedProducts;
+  
+      await cart.save();
+      return true;
+    } catch (error) {
+      throw new Error("Could not update cart: " + error);
+    }
+  }
   
   
 }
+
+
+
