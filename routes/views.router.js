@@ -18,12 +18,12 @@ router.get("/products", async (req, res) => {
   const query = req.query.query;
 
   let products = await pManagerMDB.getProductsMDB(limit, page, sort, query);
-  console.log(products);
   let productsJSON = products.docs.map(p => p.toJSON());
 
   const context = {
     productos: products,
-    productosDocs: productsJSON
+    productosDocs: productsJSON,
+    user: req.session.user
   };
 
   res.render("products", context);
@@ -76,6 +76,18 @@ router.get("/messages", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+router.get("/register", (req, res) => {
+  res.render("register")
+})
+
+router.get('/login', (req, res) => {
+  res.render('login');
+})
+
+router.get("/profile", (req, res) => {
+  res.render("profile", {user: req.session.user})
+})
 
 
 export default router;

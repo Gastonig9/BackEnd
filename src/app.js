@@ -6,9 +6,12 @@ import mongoose from "mongoose";
 import productsRouter from "../routes/products-route.js";
 import cartRouter from "../routes/carts-route.js";
 import messageRouter from "../routes/messages-route.js"
+import sessionRouter from "../routes/session-route.js"
 import viewsRouter from "../routes/views.router.js";
 
 import { Server } from "socket.io";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import { ProductManager } from "./dao/modelsFileSystem/ProductManager.js";
 
 
@@ -34,11 +37,22 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: 'coderhouse', 
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: MONGO_URL
+    })
+  })
+);
 
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/messages", messageRouter)
+app.use("/api/sessions", sessionRouter)
 
 socketServer.on("connection", (socket) => {
   console.log("Usuario conectado", socket.id);

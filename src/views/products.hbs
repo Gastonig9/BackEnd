@@ -2,10 +2,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
     <title>Document</title>
   </head>
   <body>
+    {{#if user}}
+      {{#if user.role}}
+        <div>
+          <h4>Tipo de rol: Admin</h4>
+        </div>
+      {{else}}
+        <div>
+          <h4>Tipo de rol: Usuario</h4>
+        </div>
+      {{/if}}
+
+      <h1>¡Bienvenido! {{user.name}}</h1>
+      <h6>Estos son tus datos:</h6>
+      <ul>
+        <li>Edad: {{user.age}}</li>
+        <li>Tu correo: {{user.email}}</li>
+        <a href="/api/sessions/logout">
+          <button>Logout</button>
+        </a>
+      </ul>
+    {{else}}
+      <h1>Inicia sesión</h1>
+      <a href="/login">
+        <button>Iniciar sesión</button>
+      </a>
+    {{/if}}
+
     <h1
       style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 background-color:cornflowerblue; padding: 15px; border: 2px solid black; border-radius: 25px"
@@ -22,7 +54,8 @@ background-color:cornflowerblue; padding: 15px; border: 2px solid black; border-
         <li>{{this.stock}}</li>
         <li>{{this.category}}</li>
         <li>{{this.code}}</li>
-        <a class="btn btn-dark" href="/products/{{this._id}}">Ver detalle del producto</a>
+        <a class="btn btn-dark" href="/products/{{this._id}}">Ver detalle del
+          producto</a>
       </ul>
     {{/each}}
 
